@@ -42,7 +42,7 @@ function doLogout() {
 
 async function doLoadClient() {
     console.log('Loading client...');
-    let client = await fetchClient();
+    let client = await fetchClient(localStorage.getItem('LOGIN_USERNAME'));
     if (client) {
         displayClient(client);
         openWishlistItem();
@@ -78,14 +78,22 @@ function displayClient(client) {
     clientHtml += /*html*/ `
         <div id="client-box">
             <div id="client-header">
-                <div id="client-photo"><img src="${client.photo}"></div>
                 <div id="client-name">${client.name}</div>            
-            </div>            
+            </div> <br>        
             <div id="client-groups-nav">
-                <div>
-                    <i id="nav-button-container" onclick="toggleNavigation()" class="material-icons">view_headline</i>
+            <i id="nav-button-container" onclick="toggleNavigation()" class="material-icons">view_headline</i>
+                <div id="client-picture-container">
+                    <div id="client-photo"><img src="${client.photo}"></div>
                 </div>
-                ${displayGroups(client.groups)}            
+                <div id="groups-container">
+                    <h2>Your groups:</h2> <br><br>
+                    ${displayGroups(client.groups)}
+                    <div class="add-element">
+                        <div class="add-container">
+                            <i class="material-icons">add</i>
+                        </div>            
+                    </div>    
+                </div>
             </div>
             <div id="client-dates">
                 ${displayDates(client.dates)}
@@ -102,7 +110,8 @@ function displayGroups(groups) {
     let groupsHtml = '';
     for (let group of groups) {
         groupsHtml += /*html*/`
-        <div class=client-group">
+        
+        <div class="client-group">
             <div class="group-el">
             <img src="${group.picture}">
             </div>
@@ -149,7 +158,7 @@ function displayWishlist(wishlistItems) {
             <div class="item-description">
                 
                 <div class="item-desc-elements">
-                    <img class="item-picture" src="${item.picture}">
+                    <img href="${item.link}" target="_blank" class="item-picture" src="${item.picture}">
                     <div class="item-desc-text">${item.description}</div> 
                     <div class="item-price">${item.price} €</div>
                     <div class="edit-remove-item-container">
@@ -175,13 +184,20 @@ let isNavigationOpen = false;
 
 function openLeftNavigation() {
     let navigationElement = document.querySelector('#client-groups-nav');
-    navigationElement.style.width = '50%';
+    navigationElement.style.width = '33%';
+    document.querySelector("#groups-container").style.display = "flex";
+    document.querySelector("#client-picture-container").style.display = "flex";
+    document.querySelector("#nav-button-container").style.display = "flex";
+
     isNavigationOpen = true;
 }
 
 function closeLeftNavigation() {
     let navigationElement = document.querySelector('#client-groups-nav');
-    navigationElement.style.width = '150px';
+    navigationElement.style.width = '50px';
+    document.querySelector("#groups-container").style.display = "none";
+    document.querySelector("#client-picture-container").style.display = "none";
+
     isNavigationOpen = false;
 }
 

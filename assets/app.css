@@ -1,9 +1,11 @@
+let mainColor = #5c7577;
+
 @font-face {
     font-family: 'Product Sans';
     font-style: normal;
     font-weight: 400;
     src: local('Open Sans'), local('OpenSans'), url(https://fonts.gstatic.com/s/productsans/v5/HYvgU2fE2nRJvZ5JFAumwegdm0LZdjqr5-oayXSOefg.woff2) format('woff2');
-  }
+}
 
 * {
     margin: 0;
@@ -18,7 +20,6 @@
 html, body {
     width: 100%;
     height: 100%;
-    background: white;
     background-color: #5c7577;
 }
 
@@ -26,50 +27,17 @@ html, body {
     width: 80%;
     margin-left: 175px;
     margin-right: 10%;
+    transition: 0.5s;
     position: absolute;
 }
 
- #client-photo > img{
-    border-radius: 50%;
-    height: 100px;
-    width: 100px;
-    object-fit: cover;    
-}
+ 
 
 .group-el > img{
     border-radius: 50%;
     height: 75px;
     width: 75px;
     object-fit: cover;    
-}
-
-
-
-
-#client-groups-nav {
-    border-radius: 10px;
-    padding: 8px;
-    margin: 10px;    
-    color: white;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-    background-color: #0a2123;
-    position: fixed;
-    top: 50px;
-    left: 0px;
-    bottom: 0px;
-    width: 150px;
-    z-index: 10;
-    transition: 1s;
-    opacity: 95%;
-    overflow-x: hidden;
-    
-}
-
-#nav-button-container {
-    cursor: pointer;
-    margin-left: 8px;
-    margin-top: 8px;
 }
 
 #client-header {
@@ -79,13 +47,67 @@ html, body {
     color: white;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    display: flex;    
     background-color: #32494b;
 }
 
 #client-header:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  }
+}
+
+#client-groups-nav {
+    padding-top: 50px;
+    color: white;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.5s;
+    background-color: #0a2123;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 100%;
+    z-index: 1;
+    opacity: 99%;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;    
+}
+
+#client-picture-container{
+    flex: 0.75;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+#client-photo > img{
+    border-radius: 50%;
+    height: 150px;
+    width: 150px;
+    object-fit: cover;    
+}
+
+#client-photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#groups-container {
+    padding: 10px;
+    flex: 3;
+    background-color: #32494b;
+    display: none;
+    flex-direction: column;
+}
+
+#nav-button-container {
+    cursor: pointer;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 8px;
+    display: block;
+    justify-content: flex-end;
+}
 
 #client-dates {
     padding: 8px;
@@ -108,18 +130,20 @@ html, body {
     font-size: 3em;
     font-weight: bold;
     display: flex;
-    flex: 9;
     align-items: center;
     justify-content: center;
 }
 
 .client-group {
     display: flex;
+    flex: 1;
 }
 
 .group-el {
-    display: flex;
     flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .client-date {
@@ -159,11 +183,6 @@ html, body {
     align-items: center;
 }
 
-.test-box {
-    display: none;
-    overflow: hidden;
-}
-
 .item-name {
     flex: 1;
 }
@@ -178,6 +197,7 @@ html, body {
 .active, .wishlist-item:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     background-color: #0a2123;
+    transition: 0.3s;
   }
 
 .item-content {
@@ -189,6 +209,8 @@ html, body {
     overflow: hidden;
     flex-direction: column;    
     background-color: #32494b;
+    
+    transition: 0.5s;
 }
 
 .item-description {
@@ -253,12 +275,13 @@ html, body {
 .add-element {
     display: flex;
     justify-content: flex-end;
-    background-color: #5c7577;
+    
 }
 
 
 .add-container {
     border-radius: 50%;
+    background-color: #5c7577;
     display: flex;
     height: 50px;
     width: 50px;
@@ -271,6 +294,7 @@ html, body {
 .add-container:hover {
     background-color: #0a2123;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
 }
 
 #headerBar {

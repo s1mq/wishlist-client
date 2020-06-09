@@ -13,9 +13,9 @@ async function postCredentials(credentials) {
     }
 }
 
-async function fetchClient() {
+async function fetchClient(client) {
     try {
-        const response = await fetch(`${API_URL}/clients/admin`, {
+        const response = await fetch(`${API_URL}/clients/${client}`, {
             method: 'GET',
             headers: {
                 'Authorization': composeBearerToken()
