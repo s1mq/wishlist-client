@@ -20,6 +20,15 @@ async function doLoadClient() {
     }
 }
 
+async function doDeleteWishlistItem(itemId) {
+    if (confirm('Do you wish to delete this item?')) {
+        console.log('Deleting item: ', itemId);
+        await removeWishlistItem(itemId);
+        doLoadClient();
+    }
+
+}
+
 
 /* 
     --------------------------------------------
@@ -100,7 +109,6 @@ function displayWishlist(wishlistItems) {
             <div class="expand-item">
                 <i class="material-icons">keyboard_arrow_down</i>
             </div>
-
         </div>
         <div class="item-content">
             <div class="item-description">
@@ -108,7 +116,11 @@ function displayWishlist(wishlistItems) {
                 <div class="item-desc-elements">
                     <img class="item-picture" src="${item.picture}">
                     <div class="item-desc-text">${item.description}</div> 
-                    <div style="font-size: 2em;">${item.price} €</div>                   
+                    <div class="item-price">${item.price} €</div>
+                    <div class="edit-remove-item-container">
+                        <div class="edit-icon-container"><i id="edit-icon" class="material-icons">create</i></div>
+                        <div class="remove-icon-container"><i id="remove-icon" onClick="doDeleteWishlistItem(${item.id})" class="material-icons">close</i></div>
+                    </div>                   
                 </div>
             </div>
         </div>        
@@ -148,11 +160,6 @@ function toggleNavigation() {
         openLeftNavigation();
     }
     // isNavigationOpen ? closeLeftNavigation() : openLeftNavigation();
-}
-
-function test() {
-    let myArray = document.querySelectorAll(".wishlist-item");
-    console.log('My array length is: ', myArray)
 }
 
 function openWishlistItem() {
