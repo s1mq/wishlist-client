@@ -12,17 +12,19 @@
 
 </head>
 <body>
-
-    <div id="headerBar">
+    <div style="position: fixed; z-index: 1" id="headerBar">
         <span>admin</span> | <a href="#" onclick="doLogout()">Log Out</a>
     </div>
 
     <div id="wrapper">
         <main>Main Client</main>
+        <footer>
+            &copy; Vali-IT 2020 Siim Tsarents
+        </footer>
     </div>
 
     <template id="loginTemplate"> 
-        <div style="overflow-x: hidden, overflow-y:auto;">
+        <div style="overflow-x: hidden; overflow-y: auto;">
             <h2>Log in</h2>
             Username: <br>
             <input type="text" id="loginUsername"><br><br>
@@ -31,6 +33,24 @@
             <button onclick="doLogin()">Log in</button>
         </div>
 
+    </template>
+
+    <template id="datesAddEditTemplate">
+        <div style="overflow-x:hidden; overflow-y: auto">
+            <h2>Add/Edit dates</h2> 
+            <br>            
+            <div id="errorBox" style="display: none">
+            </div>
+            <input type="hidden" id="clientId">
+            <input type="hidden" id="dateId">
+            Name: <br>
+            <input type="text" id="dateName" required><br><br>
+            Date: <br>
+            <input type="text" id="dateDate"><br><br>
+            <i onclick="doEditDate()" class="material-icons">done</i>
+            <i onclick="doDeleteDate(document.querySelector('#dateId').value)" class="material-icons">delete</i>
+            <button id="saveButton" >Salvesta</button>
+        </div>        
     </template>
 
     <script src="assets/config.js"></script>

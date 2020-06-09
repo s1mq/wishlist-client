@@ -27,6 +27,55 @@ async function fetchClient(client) {
     }
 }
 
+async function addDate(date) {
+    console.log(date);
+    try {
+        const response = await fetch(`${API_URL}/dates/add`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': composeBearerToken()
+                },
+                body: JSON.stringify(date)
+            });
+
+        handleResponse(response);
+
+    } catch (e) {
+        console.log('ERROR IN ADDING COMPANY', e);
+    }
+
+}
+
+async function fetchDateByUserAndDateId(userId, dateId) {
+    try {
+        const response = await fetch(`${API_URL}/dates/${userId}/${dateId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': composeBearerToken()
+            }
+        });
+        return processProtectedResponse(response);
+    } catch (e) {
+        console.log('ERROR OCCURED', e);
+    }
+}
+
+async function removeDate(dateId) {
+    try {
+        const response = await fetch(`${API_URL}/dates/${dateId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': composeBearerToken()
+            }
+        });
+        return handleResponse(response);
+    } catch (e) {
+        console.log('ERROR OCCURED', e);
+    }
+}
+
 async function removeWishlistItem(itemId) {
     try {
         const response = await fetch(`${API_URL}/wishlistItems/${itemId}`, {

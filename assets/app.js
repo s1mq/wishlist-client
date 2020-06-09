@@ -1,3 +1,5 @@
+let client;
+
 window.addEventListener('DOMContentLoaded', () => {
     console.log('Content loaded')
     doLoadClient();
@@ -42,13 +44,52 @@ function doLogout() {
 
 async function doLoadClient() {
     console.log('Loading client...');
-    let client = await fetchClient(localStorage.getItem('LOGIN_USERNAME'));
+    client = await fetchClient(localStorage.getItem('LOGIN_USERNAME'));
     if (client) {
         displayClient(client);
         openWishlistItem();
     } else {
         displayLoginPopup();
     }
+}
+
+async function doEditDate() {
+    const validationResult = validateDateForm();
+
+    if (validationResult.length == 0) {
+        let date;
+        if (document.querySelector('#clientId').value > 0) {
+            date = {
+                id: document.querySelector('#dateId').value,
+                name: document.querySelector('#dateName').value,
+                date: document.querySelector('#dateDate').value,
+                userId: client.userId
+            };
+            await addDate(date);
+        } else {
+            date = {
+                name: document.querySelector('#dateName').value,
+                date: document.querySelector('#dateDate').value,
+                userId: client.userId
+            };
+            await addDate(date);
+
+        }
+        await doLoadClient();
+        closePopup();
+    } else {
+        displayCompanyFormErrors(validationResult);
+    }
+}
+
+async function doDeleteDate(dateId) {
+    if (confirm('Do you wish to delete this date?')) {
+        console.log('Deleting date: ', dateId);
+        await removeDate(dateId);
+        await doLoadClient();
+        closePopup();
+    }
+
 }
 
 async function doDeleteWishlistItem(itemId) {
@@ -128,20 +169,37 @@ function displayDates(dates) {
     let datesHtml = '';
     for (let date of dates) {
         datesHtml += /*html*/ `
-        <div class="client-date">
+        <div class="client-date">            
             <div class="date-name">${date.name}</div>
             <div class="date-date">${date.date}</div>
+            <div class="date-edit"><i onclick="displayAddEditDatesPopup(${date.userId}, ${date.id})" id="edit-icon" class="material-icons">create</i></div>
         </div>
         `;
     }
     datesHtml += /*html*/`
     <div class="add-element">
         <div class="add-container">
-            <i class="material-icons">add</i>
+            <i onclick="displayAddEditDatesPopup()" class="material-icons">add</i>
         </div>
     </div>
     `;
     return datesHtml;
+}
+
+
+
+async function displayAddEditDatesPopup(userId, dateId) {
+    await openPopup(POPUP_CONF_500_500, 'datesAddEditTemplate');
+
+    if (userId > 0 && dateId > 0) {
+        console.log(userId, dateId);
+        const date = await fetchDateByUserAndDateId(userId, dateId);
+        console.log(date);
+        document.querySelector('#dateId').value = date.id;
+        document.querySelector('#dateName').value = date.name;
+        document.querySelector('#dateDate').value = date.date;
+        document.querySelector('#clientId').value = date.userId;    
+    }
 }
 
 function displayWishlist(wishlistItems) {
@@ -238,4 +296,34 @@ function openWishlistItem() {
 
 function setUpHeaderBar() {
     document.querySelector('#headerBar span').textContent = localStorage.getItem('LOGIN_USERNAME');
+}
+
+function validateDateForm() {
+    let errors = [];
+
+    let dateName = document.querySelector('#dateName').value;
+    let dateDate = document.querySelector('#dateDate').value;
+
+    if (dateName.length < 2) {
+        errors.push('Date name has to at least 2 characters')
+    }
+
+    if (dateDate == '') {
+        errors.push('Date not specified')
+    }
+    return errors;
+}
+
+function displayCompanyFormErrors(errors) {
+    const errorBox = document.querySelector('#errorBox');
+    errorBox.style.display = 'block';
+
+    let errorsHtml = '';
+
+    for (let errorMessage of errors) {
+        errorsHtml += /*html*/`<div>${errorMessage}</div>`;
+    }
+
+    errorBox.innerHTML = errorsHtml;
+
 }
