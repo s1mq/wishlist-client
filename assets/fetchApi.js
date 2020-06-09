@@ -1,6 +1,26 @@
+async function postCredentials(credentials) {
+    try {
+        const response = await fetch(`${API_URL}/users/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(credentials)
+        });
+        return await response.json();
+    } catch (e) {
+        console.log('LOGIN FAILED', e);
+    }
+}
+
 async function fetchClient() {
     try {
-        const response = await fetch(`${API_URL}/clients/admin`);
+        const response = await fetch(`${API_URL}/clients/admin`, {
+            method: 'GET',
+            headers: {
+                'Authorization': composeBearerToken()
+            }
+        });
         return await processProtectedResponse(response);
     } catch (e) {
         console.log('ERROR OCCURED', e);
@@ -10,12 +30,19 @@ async function fetchClient() {
 async function removeWishlistItem(itemId) {
     try {
         const response = await fetch(`${API_URL}/wishlistItems/${itemId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Authorization': composeBearerToken()
+            }
         });
         return handleResponse(response);
     } catch (e) {
         console.log('ERROR OCCURED', e);
     }
+}
+
+function composeBearerToken() {
+    return `Bearer ${localStorage.getItem('LOGIN_TOKEN')}`;
 }
 
 

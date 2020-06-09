@@ -1,6 +1,7 @@
 window.addEventListener('DOMContentLoaded', () => {
     console.log('Content loaded')
     doLoadClient();
+    setUpHeaderBar();
 });
 
 
@@ -10,6 +11,34 @@ window.addEventListener('DOMContentLoaded', () => {
     --------------------------------------------
 */
 
+async function doLogin() {
+    let usernameElement = document.querySelector('#loginUsername');
+    let passwordElement = document.querySelector('#loginPassword');
+    let credentials = {
+        username: usernameElement.value,
+        password: passwordElement.value,
+    };
+    let loginResponse = await postCredentials(credentials);
+    if (loginResponse.id > 0) {
+        localStorage.setItem('LOGIN_USERNAME', loginResponse.username);
+        localStorage.setItem('LOGIN_TOKEN', loginResponse.token);
+        setUpHeaderBar();
+        closePopup();
+        doLoadClient();
+    } else {
+        doLogout();
+        displayLoginPopup();
+
+    }
+
+}
+
+function doLogout() {
+    localStorage.removeItem('LOGIN_USERNAME');
+    localStorage.removeItem('LOGIN_TOKEN');
+    displayLoginPopup();
+}
+
 
 async function doLoadClient() {
     console.log('Loading client...');
@@ -17,6 +46,8 @@ async function doLoadClient() {
     if (client) {
         displayClient(client);
         openWishlistItem();
+    } else {
+        displayLoginPopup();
     }
 }
 
@@ -35,6 +66,10 @@ async function doDeleteWishlistItem(itemId) {
     DISPLAY FUNCTIONS
     --------------------------------------------
 */
+
+async function displayLoginPopup() {
+    openPopup(POPUP_CONF_BLANK_300_300, 'loginTemplate');
+}
 
 function displayClient(client) {
     const mainElement = document.querySelector('main');
@@ -183,4 +218,8 @@ function openWishlistItem() {
             }
         });
     }
+}
+
+function setUpHeaderBar() {
+    document.querySelector('#headerBar span').textContent = localStorage.getItem('LOGIN_USERNAME');
 }
