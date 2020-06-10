@@ -78,7 +78,44 @@ async function doEditDate() {
         await doLoadClient();
         closePopup();
     } else {
-        displayCompanyFormErrors(validationResult);
+        displayDateFormErrors(validationResult);
+    }
+}
+
+async function doEditWishlistItem() {
+    const validationResult = validateWishlistItemForm();
+
+    if (validationResult.length == 0) {
+        let item;
+        if (document.querySelector('#userId').value > 0) {            
+            item = {
+                id: document.querySelector('#itemId').value,
+                status: document.querySelector("#itemStatus").value,
+                itemName: document.querySelector('#itemName').value,
+                price: document.querySelector('#itemPrice').value,
+                picture: document.querySelector('#itemPicture').value,
+                description: document.querySelector('#itemDescription').value,
+                link: document.querySelector('#itemLink').value,
+                userId: client.userId
+            };
+            await addWishlistItem(item);
+        } else {
+            item = {
+                status: document.querySelector("itemStatus").value,
+                itemName: document.querySelector('#itemName').value,
+                price: document.querySelector('#itemPrice').value,
+                picture: document.querySelector('#itemPicture').value,
+                description: document.querySelector('#itemDescription').value,
+                link: document.querySelector('#itemLink').value,
+                userId: client.userId
+            };
+            await addWishlistItem(item);
+
+        }
+        await doLoadClient();
+        closePopup();
+    } else {
+        displayWishlistItemFormErrors(validationResult);
     }
 }
 
@@ -97,6 +134,7 @@ async function doDeleteWishlistItem(itemId) {
         console.log('Deleting item: ', itemId);
         await removeWishlistItem(itemId);
         doLoadClient();
+        closePopup();
     }
 
 }
@@ -207,21 +245,22 @@ function displayWishlist(wishlistItems) {
     for (let item of wishlistItems) {
         wishlistItemsHtml += /*html*/`
         <div class="wishlist-item">
+            <div class="item-status" style="display: none;">${item.status}</div>
             <div class="item-name">${item.itemName}</div>            
-            <div class="expand-item">
+            <div class="expand-item" id="expand-item-${item.id}">
                 <i class="material-icons">keyboard_arrow_down</i>
             </div>
         </div>
         <div class="item-content">
-            <div class="item-description">
-                
+            <div class="item-description">                
                 <div class="item-desc-elements">
-                    <img href="${item.link}" target="_blank" class="item-picture" src="${item.picture}">
+                    <a href="${item.link}" target="_blank">
+                        <img class="item-picture" src="${item.picture}">    
+                    </a>                    
                     <div class="item-desc-text">${item.description}</div> 
                     <div class="item-price">${item.price} €</div>
                     <div class="edit-remove-item-container">
-                        <div class="edit-icon-container"><i id="edit-icon" class="material-icons">create</i></div>
-                        <div class="remove-icon-container"><i id="remove-icon" onClick="doDeleteWishlistItem(${item.id})" class="material-icons">close</i></div>
+                        <div class="date-edit"><i onclick="displayAddEditWishlistPopup(${item.userId}, ${item.id})" id="edit-icon" class="material-icons">create</i></div>
                     </div>                   
                 </div>
             </div>
@@ -236,6 +275,23 @@ function displayWishlist(wishlistItems) {
     </div>
     `;
     return wishlistItemsHtml;
+}
+
+async function displayAddEditWishlistPopup(userId, itemId) {
+    await openPopup(POPUP_CONF_500_500, 'wishlistItemAddEditTemplate');
+
+    if (userId > 0 && itemId > 0) {
+        const item = await fetchWishlistItemByUserAndDateId(userId, itemId);
+        document.querySelector('#itemId').value = item.id;
+        document.querySelector('#userId').value = item.userId;
+        document.querySelector('#itemStatus').value = item.status;
+        document.querySelector('#itemName').value = item.itemName;
+        document.querySelector('#itemPrice').value = item.price;
+        document.querySelector('#itemPicture').value = item.picture;
+        document.querySelector('#itemDescription').value = item.description;
+        document.querySelector('#itemLink').value = item.link;
+
+    }
 }
 
 let isNavigationOpen = false;
@@ -279,9 +335,10 @@ function openWishlistItem() {
 
     for (i = 0; i < coll.length; i++) {
         coll[i].addEventListener("click", function () {
+            console.log(this);
             this.classList.toggle("active");
             let content = this.nextElementSibling;
-            let expandIcon = document.querySelector(".expand-item");
+            let expandIcon = this.querySelector(".expand-item");
             if (content.style.display === "flex") {
                 content.style.display = "none";
                 expandIcon.innerHTML = '<i class="material-icons">keyboard_arrow_down</i>';
@@ -305,7 +362,7 @@ function validateDateForm() {
     let dateDate = document.querySelector('#dateDate').value;
 
     if (dateName.length < 2) {
-        errors.push('Date name has to at least 2 characters')
+        errors.push('Date name has to be at least 2 characters')
     }
 
     if (dateDate == '') {
@@ -314,7 +371,7 @@ function validateDateForm() {
     return errors;
 }
 
-function displayCompanyFormErrors(errors) {
+function displayDateFormErrors(errors) {
     const errorBox = document.querySelector('#errorBox');
     errorBox.style.display = 'block';
 
@@ -326,4 +383,27 @@ function displayCompanyFormErrors(errors) {
 
     errorBox.innerHTML = errorsHtml;
 
+}
+
+function validateWishlistItemForm() {
+    let errors = [];
+    let itemName = document.querySelector('#itemName').value;
+
+    if (itemName.length < 2) {
+        errors.push('Item name has to be at least 2 characters')
+    }
+    return errors;
+}
+
+function displayWishlistItemFormErrors(errors){
+    const errorBox = document.querySelector('#errorBox');
+    errorBox.style.display = 'block';
+
+    let errorsHtml = '';
+
+    for (let errorMessage of errors) {
+        errorsHtml += /*html*/`<div>${errorMessage}</div>`;
+    }
+
+    errorBox.innerHTML = errorsHtml;
 }

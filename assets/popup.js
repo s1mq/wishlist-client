@@ -17,7 +17,7 @@ const POPUP_CONF_BLANK_300_300 = {
 const POPUP_CONF_500_500 = {
     dimensionClass: 'popup-500-500',
     displayCloseButton: true,
-    coverBackground: '#32494b',
+    coverBackground: 'var(--main-color)',
     coverOpacity: '95%',
     coverCloseOnClick: true
 };
@@ -25,7 +25,7 @@ const POPUP_CONF_500_500 = {
 const POPUP_CONF_500_200 = {
     dimensionClass: 'popup-500-200',
     displayCloseButton: true,
-    coverBackground: '#32494b',
+    coverBackground: 'var(--main-color)',
     coverOpacity: '95%',
     coverCloseOnClick: true
 };

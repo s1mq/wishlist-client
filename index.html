@@ -53,6 +53,31 @@
         </div>        
     </template>
 
+    <template id="wishlistItemAddEditTemplate">
+        <div style="overflow-x:hidden; overflow-y: auto">
+            <h2>Add/Edit wishlist item</h2> 
+            <br>            
+            <div id="errorBox" style="display: none">
+            </div>
+            <input type="hidden" id="itemId">
+            <input type="hidden" id="userId">
+            <input type="hidden" id="itemStatus">
+            Name: <br>
+            <input type="text" id="itemName" required><br><br>
+            Price: <br>
+            <input type="text" id="itemPrice"><br><br>
+            Picture: <br>
+            <input type="text" id="itemPicture"><br><br>
+            Description: <br>
+            <textarea id="itemDescription" rows="4" cols="50"></textarea><br><br>
+            Link: <br>
+            <input type="text" id="itemLink"><br><br>
+            <i onclick="doEditWishlistItem()" class="material-icons">done</i>
+            <i onclick="doDeleteWishlistItem(document.querySelector('#itemId').value)" class="material-icons">delete</i>
+            <button id="saveButton" >Salvesta</button>
+        </div>        
+    </template>
+
     <script src="assets/config.js"></script>
     <script src="assets/fetchApi.js"></script>
     <script src="assets/app.js"></script>

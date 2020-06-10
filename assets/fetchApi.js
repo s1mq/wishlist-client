@@ -43,14 +43,46 @@ async function addDate(date) {
         handleResponse(response);
 
     } catch (e) {
-        console.log('ERROR IN ADDING COMPANY', e);
+        console.log('ERROR IN ADDING DATE', e);
     }
 
+}
+
+async function addWishlistItem(item) {
+    try {
+        const response = await fetch(`${API_URL}/wishlistItems/add`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': composeBearerToken()
+            },
+            body: JSON.stringify(item)
+
+        });
+        handleResponse(response);
+    } catch (e) {
+        console.log('ERROR IN ADDING ITEM', e);
+    }
 }
 
 async function fetchDateByUserAndDateId(userId, dateId) {
     try {
         const response = await fetch(`${API_URL}/dates/${userId}/${dateId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': composeBearerToken()
+            }
+        });
+        return processProtectedResponse(response);
+    } catch (e) {
+        console.log('ERROR OCCURED', e);
+    }
+}
+
+async function fetchWishlistItemByUserAndDateId(userId, itemId) {
+    try {
+        const response = await fetch(`${API_URL}/wishlistItems/${userId}/${itemId}`, {
             method: 'GET',
             headers: {
                 'Authorization': composeBearerToken()

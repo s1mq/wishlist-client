@@ -5,6 +5,12 @@
     src: local('Open Sans'), local('OpenSans'), url(https://fonts.gstatic.com/s/productsans/v5/HYvgU2fE2nRJvZ5JFAumwegdm0LZdjqr5-oayXSOefg.woff2) format('woff2');
 }
 
+:root {
+    --main-color: #32494b;
+    --secondary-color: #5c7577;
+    --accent-color: #0a2123;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -18,14 +24,40 @@
 html, body {
     width: 100%;
     height: 100%;
-    background-color: #5c7577;
+    
+
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    background: var(--accent-color);
+    border-radius: 10px;
+}
+  
+  /* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--main-color);
+    border-radius: 10px;
+}
+  
+  /* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+::-webkit-scrollbar-corner {
+    background: var(--secondary-color);
 }
 
 #wrapper {
     top: 50px;
-    width: 80%;
-    margin-left: 5vW;
-    margin-right: 5vW;
+    left: 60px;
+    width: 95%;
     transition: 0.5s;
     position: absolute;
 }
@@ -46,7 +78,7 @@ html, body {
     color: white;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    background-color: #32494b;
+    background-color: var(--main-color);
 }
 
 #client-header:hover {
@@ -58,7 +90,7 @@ html, body {
     color: white;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.5s;
-    background-color: #0a2123;
+    background-color: var(--accent-color);
     position: fixed;
     top: 0;
     left: 0;
@@ -94,7 +126,7 @@ html, body {
 #groups-container {
     padding: 10px;
     flex: 3;
-    background-color: #32494b;
+    background-color: var(--main-color);
     display: none;
     flex-direction: column;
 }
@@ -155,6 +187,7 @@ html, body {
     transition: 0.3s;
     display: flex;
     align-items: center;
+    background-color: var(--secondary-color);
 }
 
 .client-date:hover {
@@ -164,13 +197,21 @@ html, body {
 .date-edit {
     margin-right: 8px;
     flex: 1;
-    display: none;
+    opacity: 0;
+    display: flex;
     justify-content: flex-end;
     align-items: center;
+    transition: 0.3s;
 }
 
 .client-date:hover .date-edit {
     display: flex;
+    opacity: 100%;
+  }
+
+  .item-desc-elements:hover .date-edit {
+    display: flex;
+    opacity: 100%;
   }
 
 .date-name {
@@ -191,7 +232,7 @@ html, body {
     font-size: 1.5em; 
     margin-bottom: 8px;
     border-radius: 10px;
-    background-color: #32494b;
+    background-color: var(--main-color);
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     display: flex;
     align-items: center;
@@ -210,7 +251,7 @@ html, body {
 
 .active, .wishlist-item:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    background-color: #0a2123;
+    background-color: var(--accent-color);
     transition: 0.3s;
   }
 
@@ -222,7 +263,7 @@ html, body {
     display: none;
     overflow: hidden;
     flex-direction: column;    
-    background-color: #32494b;
+    background-color: var(--main-color);
     
     transition: 0.5s;
 }
@@ -244,9 +285,10 @@ html, body {
 }
 
 .item-desc-text {
+    padding: 10px;
     border-radius: 10px;
     font-size: 1em;
-    background-color: #0a2123;
+    background-color: var(--accent-color);
     flex: 3;
 }
 
@@ -272,12 +314,12 @@ html, body {
 
 #edit-icon:hover {
     cursor: pointer;
-    color: #0a2123;
+    color: var(--accent-color);
 }
 
 #remove-icon:hover{
     cursor: pointer;
-    color: #0a2123;
+    color: var(--accent-color);
 }
 
 .remove-icon-container {
@@ -295,7 +337,7 @@ html, body {
 
 .add-container {
     border-radius: 50%;
-    background-color: #5c7577;
+    background-color: var(--secondary-color);
     display: flex;
     height: 50px;
     width: 50px;
@@ -306,7 +348,7 @@ html, body {
 }
 
 .add-container:hover {
-    background-color: #0a2123;
+    background-color: var(--accent-color);
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
 }
@@ -314,7 +356,7 @@ html, body {
 #headerBar {
     margin: 0px;
     padding: 10px;
-    background: #0a2123;
+    background: var(--accent-color);
     color: white;
     width: 100%;
     display: flex;
