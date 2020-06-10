@@ -207,12 +207,17 @@ html, body {
 .client-date:hover .date-edit {
     display: flex;
     opacity: 100%;
-  }
+}
 
-  .item-desc-elements:hover .date-edit {
+.item-desc-elements:hover .date-edit {
     display: flex;
     opacity: 100%;
-  }
+}
+
+.client-group:hover .date-edit {
+    display: flex;
+    opacity: 100%;
+}
 
 .date-name {
     width: 350px;

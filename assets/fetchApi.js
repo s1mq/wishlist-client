@@ -27,8 +27,27 @@ async function fetchClient(client) {
     }
 }
 
+async function addGroup(group) {
+    try {
+        const response = await fetch(`${API_URL}/groups/add`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': composeBearerToken()
+                },
+                body: JSON.stringify(group)
+            });
+
+        handleResponse(response);
+
+    } catch (e) {
+        console.log('ERROR IN ADDING GROUP', e);
+    }
+
+}
+
 async function addDate(date) {
-    console.log(date);
     try {
         const response = await fetch(`${API_URL}/dates/add`,
             {
@@ -66,6 +85,20 @@ async function addWishlistItem(item) {
     }
 }
 
+async function fetchGroupByUserAndGroupId(userId, groupId) {
+    try {
+        const response = await fetch(`${API_URL}/groups/${userId}/${groupId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': composeBearerToken()
+            }
+        });
+        return processProtectedResponse(response);
+    } catch (e) {
+        console.log('ERROR OCCURED', e);
+    }
+}
+
 async function fetchDateByUserAndDateId(userId, dateId) {
     try {
         const response = await fetch(`${API_URL}/dates/${userId}/${dateId}`, {
@@ -89,6 +122,20 @@ async function fetchWishlistItemByUserAndDateId(userId, itemId) {
             }
         });
         return processProtectedResponse(response);
+    } catch (e) {
+        console.log('ERROR OCCURED', e);
+    }
+}
+
+async function removeGroup(groupId) {
+    try {
+        const response = await fetch(`${API_URL}/groups/${groupId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': composeBearerToken()
+            }
+        });
+        return handleResponse(response);
     } catch (e) {
         console.log('ERROR OCCURED', e);
     }

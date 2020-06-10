@@ -78,6 +78,26 @@
         </div>        
     </template>
 
+    <template id="groupAddEditTemplate">
+        <div style="overflow-x:hidden; overflow-y: auto">
+            <h2>Add/Edit group</h2> 
+            <br>            
+            <div id="errorBox" style="display: none">
+            </div>
+            <input type="hidden" id="groupId">
+            <input type="hidden" id="userId">
+            Name: <br>
+            <input type="text" id="groupName" required><br><br>
+            Picture: <br>
+            <input type="text" id="groupPicture"><br><br>
+            Description: <br>
+            <textarea id="groupDescription" rows="4" cols="50"></textarea><br><br>
+            <i onclick="doEditGroup()" class="material-icons">done</i>
+            <i onclick="doDeleteGroup(document.querySelector('#groupId').value)" class="material-icons">delete</i>
+            <button id="saveButton" >Salvesta</button>
+        </div>        
+    </template>
+
     <script src="assets/config.js"></script>
     <script src="assets/fetchApi.js"></script>
     <script src="assets/app.js"></script>

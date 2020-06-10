@@ -53,6 +53,37 @@ async function doLoadClient() {
     }
 }
 
+async function doEditGroup() {
+    const validationResult = validateGroupForm();
+
+    if (validationResult.length == 0) {
+        let group;
+        if (document.querySelector('#userId').value > 0) {
+            group = {
+                id: document.querySelector('#groupId').value,
+                name: document.querySelector('#groupName').value,
+                picture: document.querySelector('#groupPicture').value,
+                description: document.querySelector('#groupDescription').value,
+                userId: client.userId
+            };
+            await addGroup(group);
+        } else {
+            group = {
+                name: document.querySelector('#groupName').value,
+                picture: document.querySelector('#groupPicture').value,
+                description: document.querySelector('#groupDescription').value,
+                userId: client.userId
+            };
+            await addGroup(group);
+
+        }
+        await doLoadClient();
+        closePopup();
+    } else {
+        displayGroupFormErrors(validationResult);
+    }
+}
+
 async function doEditDate() {
     const validationResult = validateDateForm();
 
@@ -101,7 +132,7 @@ async function doEditWishlistItem() {
             await addWishlistItem(item);
         } else {
             item = {
-                status: document.querySelector("itemStatus").value,
+                status: document.querySelector("#itemStatus").value,
                 itemName: document.querySelector('#itemName').value,
                 price: document.querySelector('#itemPrice').value,
                 picture: document.querySelector('#itemPicture').value,
@@ -117,6 +148,17 @@ async function doEditWishlistItem() {
     } else {
         displayWishlistItemFormErrors(validationResult);
     }
+}
+
+async function doDeleteGroup(groupId) {
+    if (confirm('Do you wish to delete this group?')) {
+        console.log('Deleting group: ', groupId);
+        await removeGroup(groupId);
+        doLoadClient();        
+        closePopup();
+        toggleNavigation();
+    }
+
 }
 
 async function doDeleteDate(dateId) {
@@ -167,11 +209,7 @@ function displayClient(client) {
                 <div id="groups-container">
                     <h2>Your groups:</h2> <br><br>
                     ${displayGroups(client.groups)}
-                    <div class="add-element">
-                        <div class="add-container">
-                            <i class="material-icons">add</i>
-                        </div>            
-                    </div>    
+                        
                 </div>
             </div>
             <div id="client-dates">
@@ -188,19 +226,42 @@ function displayClient(client) {
 function displayGroups(groups) {
     let groupsHtml = '';
     for (let group of groups) {
-        groupsHtml += /*html*/`
-        
+        groupsHtml += /*html*/`        
         <div class="client-group">
             <div class="group-el">
-            <img src="${group.picture}">
+                <img src="${group.picture}">
             </div>
             <div class="group-el">
                 <h2>${group.name}</h2>            
-            </div>            
+            </div>
+            <div class="date-edit">
+                <i onclick="displayAddEditGroupPopup(${group.userId}, ${group.id})" id="edit-icon" class="material-icons">create</i>
+            </div>                        
         </div>
         `;
     }
+    groupsHtml += /*html*/`
+    <div class="add-element">
+        <div class="add-container">
+            <i onclick="displayAddEditGroupPopup()" class="material-icons">add</i>
+        </div>            
+    </div>
+    `;
     return groupsHtml;
+}
+
+async function displayAddEditGroupPopup(userId, groupId) {
+    await openPopup(POPUP_CONF_500_500, 'groupAddEditTemplate');
+
+    if (userId > 0 && groupId > 0) {
+        const group = await fetchGroupByUserAndGroupId(userId, groupId);
+        document.querySelector('#groupId').value = group.id;
+        document.querySelector('#userId').value = group.userId;
+        document.querySelector('#groupName').value = group.name;
+        document.querySelector('#groupPicture').value = group.picture;
+        document.querySelector('#groupDescription').value = group.description;
+
+    }
 }
 
 function displayDates(dates) {
@@ -270,7 +331,7 @@ function displayWishlist(wishlistItems) {
     wishlistItemsHtml += /*html*/`
     <div class="add-element">
         <div class="add-container">
-            <i class="material-icons">add</i>
+            <i onclick="displayAddEditWishlistPopup()" class="material-icons">add</i>
         </div>
     </div>
     `;
@@ -335,7 +396,6 @@ function openWishlistItem() {
 
     for (i = 0; i < coll.length; i++) {
         coll[i].addEventListener("click", function () {
-            console.log(this);
             this.classList.toggle("active");
             let content = this.nextElementSibling;
             let expandIcon = this.querySelector(".expand-item");
@@ -355,6 +415,17 @@ function setUpHeaderBar() {
     document.querySelector('#headerBar span').textContent = localStorage.getItem('LOGIN_USERNAME');
 }
 
+function validateGroupForm() {
+    let errors = [];
+
+    let groupName = document.querySelector('#groupName').value;
+
+    if (groupName.length < 2) {
+        errors.push('Group name has to be at least 2 characters')
+    }
+    return errors;
+}
+
 function validateDateForm() {
     let errors = [];
 
@@ -371,20 +442,6 @@ function validateDateForm() {
     return errors;
 }
 
-function displayDateFormErrors(errors) {
-    const errorBox = document.querySelector('#errorBox');
-    errorBox.style.display = 'block';
-
-    let errorsHtml = '';
-
-    for (let errorMessage of errors) {
-        errorsHtml += /*html*/`<div>${errorMessage}</div>`;
-    }
-
-    errorBox.innerHTML = errorsHtml;
-
-}
-
 function validateWishlistItemForm() {
     let errors = [];
     let itemName = document.querySelector('#itemName').value;
@@ -395,7 +452,7 @@ function validateWishlistItemForm() {
     return errors;
 }
 
-function displayWishlistItemFormErrors(errors){
+function displayFormErrors(errors) {
     const errorBox = document.querySelector('#errorBox');
     errorBox.style.display = 'block';
 
@@ -406,4 +463,5 @@ function displayWishlistItemFormErrors(errors){
     }
 
     errorBox.innerHTML = errorsHtml;
+
 }
