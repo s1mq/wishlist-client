@@ -235,5 +235,7 @@ function handleResponse(response) {
     if (response.status >= 401) {
         // clearAuthentication();
         throw new Error('Unauthorized');
+    } else if (response.status == 200) {
+        showSnackbar();
     }
 }

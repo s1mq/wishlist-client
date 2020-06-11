@@ -583,13 +583,12 @@ function dateCheck() {
     const dates = document.querySelectorAll(".date-date");
     const date1 = new Date();
     const year = date1.getFullYear();
-    console.log(year)
     for (let el of dates) {
         const monthAndDay = el.innerHTML.substr(4, 10)
         const date2 = new Date(year + monthAndDay)
-        const diffTime = Math.abs(date2 - date1);
+        const diffTime = date2 - date1;
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        if (diffDays < 30 ) {
+        if (diffDays < 30 && diffDays > 0) {
             el.parentElement.style.backgroundColor = '#E66060'
         }
     }
@@ -672,3 +671,11 @@ function reserveItem(userId, id, status) {
     doLoadSubClient(userId);   
     
 }
+
+function showSnackbar() {
+    var x = document.getElementById("snackbar");
+  
+    x.className = "show";
+  
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+  }
