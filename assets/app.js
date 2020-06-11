@@ -44,6 +44,7 @@ async function doLoadClient() {
     client = await fetchClient(localStorage.getItem('LOGIN_USERNAME'));
     if (client) {
         displayMainClient(client);
+        dateCheck();
         openWishlistItem();
         isitemReserved();
         closeLeftNavigation();
@@ -56,6 +57,7 @@ async function doLoadSubClient(id) {
     let subClient = await fetchClientById(id);
     if (subClient) {
         displaySubClient(subClient);
+        dateCheck();
         openWishlistItem();
         isitemReserved();
     }
@@ -568,6 +570,29 @@ function openWishlistItem() {
             }
         });
     }
+    let numbers = document.querySelectorAll(".item-price");
+    for (let el of numbers) {
+        let string = el.innerHTML
+        let price = parseInt(string.substr(0, string.indexOf(' ')));
+        let priceToLocale = price.toLocaleString("fi-FI");
+        el.innerHTML = priceToLocale + ' €';
+    }
+}
+
+function dateCheck() {
+    const dates = document.querySelectorAll(".date-date");
+    const date1 = new Date();
+    const year = date1.getFullYear();
+    console.log(year)
+    for (let el of dates) {
+        const monthAndDay = el.innerHTML.substr(4, 10)
+        const date2 = new Date(year + monthAndDay)
+        const diffTime = Math.abs(date2 - date1);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays < 30 ) {
+            el.parentElement.style.backgroundColor = '#E66060'
+        }
+    }
 }
 
 function setUpHeaderBar() {
@@ -643,6 +668,7 @@ function reserveItem(userId, id, status) {
         doEditItemStatus(userId, id, false);
     } else {
         doEditItemStatus(userId, id, true)
-    }   
+    }
+    doLoadSubClient(userId);   
     
 }
