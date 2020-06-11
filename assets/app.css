@@ -239,6 +239,7 @@ html, body {
     transition: 0.3s;
 }
 
+
 .client-date:hover .date-edit {
     display: flex;
     opacity: 100%;
@@ -418,6 +419,39 @@ html, body {
 }
 
 
+#save-icon {
+    border: 1px solid white;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+#save-icon:hover {
+    border: 3px solid white;
+    border-radius: 50%;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+#delete-icon {
+    border: 1px solid white;
+    border-radius: 50%;
+    margin-left: 8px;
+}
+
+#delete-icon:hover {
+    border: 3px solid white;
+    border-radius: 50%;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+#errorBox {
+    border: 3px solid #DE2B2B;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    padding: 8px;
+    background-color: #E66060;
+}
 
 
 

@@ -51,8 +51,8 @@ function initPopup() {
                 <div id="popupTopBar" style="display: none;">
                     <a href="javascript:closePopup()">
                         <svg height="20" width="20">
-                            <line x1="0" y1="0" x2="20" y2="20" style="stroke:darkblue;stroke-width:2" />
-                            <line x1="0" y1="20" x2="20" y2="0" style="stroke:darkblue;stroke-width:2" />
+                            <line x1="0" y1="0" x2="15" y2="15" style="stroke:white;stroke-width:2" />
+                            <line x1="0" y1="15" x2="15" y2="0" style="stroke:white;stroke-width:2" />
                         </svg>
                     </a>
                 </div>

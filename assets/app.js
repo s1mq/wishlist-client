@@ -94,7 +94,7 @@ async function doEditGroup() {
         await doLoadClient();
         closePopup();
     } else {
-        displayGroupFormErrors(validationResult);
+        displayFormErrors(validationResult);
     }
 }
 
@@ -123,7 +123,7 @@ async function doEditDate() {
         await doLoadClient();
         closePopup();
     } else {
-        displayDateFormErrors(validationResult);
+        displayFormErrors(validationResult);
     }
 }
 
@@ -160,7 +160,7 @@ async function doEditWishlistItem() {
         await doLoadClient();
         closePopup();
     } else {
-        displayWishlistItemFormErrors(validationResult);
+        displayFormErrors(validationResult);
     }
 }
 
@@ -182,6 +182,8 @@ async function doDeleteDate(dateId) {
     }
 
 }
+
+
 
 async function doDeleteWishlistItem(itemId) {
     if (confirm('Do you wish to delete this item?')) {

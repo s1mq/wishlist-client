@@ -11,7 +11,7 @@
   
   input {
     font-size: 1.5em;
-    width: 150px;
+    width: 75%;
     border: none;
     background-color: var(--main-color);
     border-bottom: 2px solid white;

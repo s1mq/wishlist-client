@@ -100,8 +100,12 @@
     cursor: pointer;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 500px) {
     .popup-300-300 {
+        width: calc(100% - 40px);
+    }
+
+    .popup-350-500 {
         width: calc(100% - 40px);
     }
     
@@ -110,6 +114,14 @@
     }
 
     .popup-600-800 {
+        width: calc(100% - 40px);
+    }
+
+    .popup-500-500 {
+        width: calc(100% - 40px);
+    }
+
+    .popup-500-200{
         width: calc(100% - 40px);
     }
 }

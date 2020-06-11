@@ -57,9 +57,8 @@
             <input type="text" id="dateName" required><br><br>
             Date: <br>
             <input type="text" id="dateDate"><br><br>
-            <i onclick="doEditDate()" class="material-icons">done</i>
-            <i onclick="doDeleteDate(document.querySelector('#dateId').value)" class="material-icons">delete</i>
-            <button id="saveButton" >Salvesta</button>
+            <i id="save-icon" onclick="doEditDate()" class="material-icons">done</i>
+            <i id="delete-icon" onclick="doDeleteDate(document.querySelector('#dateId').value)" class="material-icons">delete</i>
         </div>        
     </template>
 
@@ -82,9 +81,8 @@
             <textarea id="itemDescription" rows="4" cols="50"></textarea><br><br>
             Link: <br>
             <input type="text" id="itemLink"><br><br>
-            <i onclick="doEditWishlistItem()" class="material-icons">done</i>
-            <i onclick="doDeleteWishlistItem(document.querySelector('#itemId').value)" class="material-icons">delete</i>
-            <button id="saveButton" >Salvesta</button>
+            <i id="save-icon" onclick="doEditWishlistItem()" class="material-icons">done</i>
+            <i id="delete-icon" onclick="doDeleteWishlistItem(document.querySelector('#itemId').value)" class="material-icons">delete</i>
         </div>        
     </template>
 
@@ -101,10 +99,10 @@
             Picture: <br>
             <input type="text" id="groupPicture"><br><br>
             Description: <br>
-            <textarea id="groupDescription" rows="4" cols="50"></textarea><br><br>
-            <i onclick="doEditGroup()" class="material-icons">done</i>
-            <i onclick="doDeleteGroup(document.querySelector('#groupId').value)" class="material-icons">delete</i>
-            <button id="saveButton" >Salvesta</button>
+            <textarea id="groupDescription" rows="4" cols="50"></textarea><br><br>            
+            <i id="save-icon" onclick="doEditGroup()" class="material-icons">done</i>                
+            <i id="delete-icon" onclick="doDeleteGroup(document.querySelector('#groupId').value)" class="material-icons">delete</i>
+                       
         </div>        
     </template>
 
