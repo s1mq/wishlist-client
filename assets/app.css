@@ -183,8 +183,7 @@ html, body {
     width: 500px;
     padding: 8px;
     margin: 10px;    
-    color: white;
-    
+    color: white;    
 }
 
 #client-wishlist {
@@ -417,3 +416,22 @@ html, body {
 #headerBar a {
     color: white;
 }
+
+
+
+
+
+@media only screen and (max-width: 500px) {
+    #client-dates {
+        width: 75%;
+        padding: 8px;
+        margin: 10px;    
+        color: white;    
+    }
+
+    .client-date {
+        display: flex;
+        flex-flow: row wrap;
+        height: auto;
+    }
+  }

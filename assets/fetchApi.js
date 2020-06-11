@@ -13,9 +13,24 @@ async function postCredentials(credentials) {
     }
 }
 
-async function fetchClient(client) {
+async function fetchClient(name) {
     try {
-        const response = await fetch(`${API_URL}/clients/${client}`, {
+        const response = await fetch(`${API_URL}/clients/${name}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': composeBearerToken()
+            }
+        });
+        return await processProtectedResponse(response);
+    } catch (e) {
+        console.log('ERROR OCCURED', e);
+    }
+}
+
+async function fetchClientById(id) {
+    console.log(id);
+    try {
+        const response = await fetch(`${API_URL}/clients/user/${id}`, {
             method: 'GET',
             headers: {
                 'Authorization': composeBearerToken()

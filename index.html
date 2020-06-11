@@ -9,6 +9,8 @@
       rel="stylesheet">
     <link rel="stylesheet" href="assets/popup.css">
     <link rel="stylesheet" href="assets/app.css">
+    <link rel="stylesheet" href="assets/input.css">
+
 
 </head>
 <body>
@@ -24,13 +26,21 @@
     </div>
 
     <template id="loginTemplate"> 
-        <div style="overflow-x: hidden; overflow-y: auto;">
-            <h2>Log in</h2>
-            Username: <br>
-            <input type="text" id="loginUsername"><br><br>
-            Password: <br>
-            <input type="password" id ="loginPassword"><br><br>
-            <button onclick="doLogin()">Log in</button>
+        <div id="popup-fields" style="overflow-x: hidden; overflow-y: auto;">
+            <div id="log-in-header">
+                <h2>Log in</h2>
+            </div> <br><br>
+            <div class="field">
+                <input type="text" name="username" id="loginUsername" placeholder="pahaPoiss007">
+                <label for="loginUsername">Username</label>
+            </div>
+            <div class="field">
+                <input type="password" name="password" id="loginPassword" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+                <label for="loginPassword">Password</label>
+            </div><br><br>
+            <div id="login-icon-container">
+                <i id="login-icon" onclick="doLogin()" style="color:white;" class="material-icons">done</i>
+            </div>
         </div>
 
     </template>

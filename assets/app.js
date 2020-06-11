@@ -1,7 +1,5 @@
 let client;
-
 window.addEventListener('DOMContentLoaded', () => {
-    console.log('Content loaded')
     doLoadClient();
     setUpHeaderBar();
 });
@@ -43,10 +41,9 @@ function doLogout() {
 
 
 async function doLoadClient() {
-    console.log('Loading client...');
     client = await fetchClient(localStorage.getItem('LOGIN_USERNAME'));
     if (client) {
-        displayClient(client);
+        displayMainClient(client);
         openWishlistItem();
         closeLeftNavigation();
     } else {
@@ -54,9 +51,16 @@ async function doLoadClient() {
     }
 }
 
+async function doLoadSubClient(id) {
+    let subClient = await fetchClientById(id);
+    if (subClient) {
+        displaySubClient(subClient);
+        openWishlistItem();
+    }
+}
+
 async function doLoadClientsByGroup(groupId, groupName) {
     clients = await fetchClientsByGroup(groupId);
-    console.log(clients);
     if (clients) {
         displayClientsByGroup(clients, groupName);
     }
@@ -162,7 +166,6 @@ async function doEditWishlistItem() {
 
 async function doDeleteGroup(groupId) {
     if (confirm('Do you wish to delete this group?')) {
-        console.log('Deleting group: ', groupId);
         await removeGroup(groupId);
         doLoadClient();        
         closePopup();
@@ -173,7 +176,6 @@ async function doDeleteGroup(groupId) {
 
 async function doDeleteDate(dateId) {
     if (confirm('Do you wish to delete this date?')) {
-        console.log('Deleting date: ', dateId);
         await removeDate(dateId);
         await doLoadClient();
         closePopup();
@@ -183,7 +185,6 @@ async function doDeleteDate(dateId) {
 
 async function doDeleteWishlistItem(itemId) {
     if (confirm('Do you wish to delete this item?')) {
-        console.log('Deleting item: ', itemId);
         await removeWishlistItem(itemId);
         doLoadClient();
         closePopup();
@@ -199,10 +200,10 @@ async function doDeleteWishlistItem(itemId) {
 */
 
 async function displayLoginPopup() {
-    openPopup(POPUP_CONF_BLANK_300_300, 'loginTemplate');
+    openPopup(POPUP_CONF_LOGIN_350_500, 'loginTemplate');
 }
 
-function displayClient(client) {
+function displayMainClient(client) {
     const mainElement = document.querySelector('main');
     let clientHtml = '';
 
@@ -219,19 +220,72 @@ function displayClient(client) {
                 <div id="groups-container">
                     <h2>Your groups:</h2> <br><br>
                     ${displayGroups(client.groups)}
-                        
+                    <div class="add-element">
+                        <div class="add-container">
+                            <i onclick="displayAddEditGroupPopup()" class="material-icons">add</i>
+                        </div>            
+                    </div>                        
                 </div>
             </div>
             <div id="client-dates">
                 ${displayDates(client.dates)}
+                <div class="add-element">
+                    <div class="add-container">
+                        <i onclick="displayAddEditDatesPopup()" class="material-icons">add</i>
+                    </div>
+                </div>
             </div>
+            
             <div id="client-wishlist">
                 ${displayWishlist(client.wishlistItems)}
+                <div class="add-element">
+                    <div class="add-container">
+                        <i onclick="displayAddEditWishlistPopup()" class="material-icons">add</i>
+                    </div>
+                </div>
             </div>
         </div>
     `;
     mainElement.innerHTML = clientHtml;
 }
+
+function displaySubClient(subClient) {
+    const mainElement = document.querySelector('main');
+    let clientHtml = '';
+
+    clientHtml += /*html*/ `
+        <div id="client-box">
+            <div id="client-header">
+                <div id="client-name">${subClient.name}</div>            
+            </div> <br>        
+            <div id="client-groups-nav">
+            <i id="nav-button-container" onclick="toggleNavigation()" class="material-icons">view_headline</i>
+                <div id="client-picture-container">
+                    <div id="client-photo"><img onclick="doLoadClient()" class="client-photo-img" src="${client.photo}"></div>
+                </div>
+                <div id="groups-container">
+                    <h2>Your groups:</h2> <br><br>
+                    ${displayGroups(client.groups)}
+                    <div class="add-element">
+                        <div class="add-container">
+                            <i onclick="displayAddEditGroupPopup()" class="material-icons">add</i>
+                        </div>            
+                    </div>                        
+                </div>
+            </div>
+            <div id="client-dates">
+                ${displaySubClientDates(subClient.dates)}
+            </div>
+            
+            <div id="client-wishlist">
+                ${displaySubClientWishlist(subClient.wishlistItems)}                
+            </div>
+        </div>
+    `;
+    mainElement.innerHTML = clientHtml;
+}
+
+
 
 function displayClientsByGroup(clients, name) {
     const mainElement = document.querySelector('main');
@@ -272,7 +326,7 @@ function displayClients(clients) {
         clientsHtml += /*html*/`        
         <div>
             <div class="client-list-el">
-                <img class="" src="${client.photo}">
+                <img onclick="doLoadSubClient(${client.userId})" src="${client.photo}">
             </div>
             <div class="client-list-el" style="color: var(--main-color);">
                 <h2>${client.name}</h2>            
@@ -300,13 +354,6 @@ function displayGroups(groups) {
         </div>
         `;
     }
-    groupsHtml += /*html*/`
-    <div class="add-element">
-        <div class="add-container">
-            <i onclick="displayAddEditGroupPopup()" class="material-icons">add</i>
-        </div>            
-    </div>
-    `;
     return groupsHtml;
 }
 
@@ -335,13 +382,6 @@ function displayDates(dates) {
         </div>
         `;
     }
-    datesHtml += /*html*/`
-    <div class="add-element">
-        <div class="add-container">
-            <i onclick="displayAddEditDatesPopup()" class="material-icons">add</i>
-        </div>
-    </div>
-    `;
     return datesHtml;
 }
 
@@ -351,14 +391,25 @@ async function displayAddEditDatesPopup(userId, dateId) {
     await openPopup(POPUP_CONF_500_500, 'datesAddEditTemplate');
 
     if (userId > 0 && dateId > 0) {
-        console.log(userId, dateId);
         const date = await fetchDateByUserAndDateId(userId, dateId);
-        console.log(date);
         document.querySelector('#dateId').value = date.id;
         document.querySelector('#dateName').value = date.name;
         document.querySelector('#dateDate').value = date.date;
         document.querySelector('#clientId').value = date.userId;    
     }
+}
+
+function displaySubClientDates(dates) {
+    let datesHtml = '';
+    for (let date of dates) {
+        datesHtml += /*html*/ `
+        <div class="client-date">            
+            <div class="date-name">${date.name}</div>
+            <div class="date-date">${date.date}</div>
+        </div>
+        `;
+    }
+    return datesHtml;
 }
 
 function displayWishlist(wishlistItems) {
@@ -388,13 +439,6 @@ function displayWishlist(wishlistItems) {
         </div>        
         `;
     }
-    wishlistItemsHtml += /*html*/`
-    <div class="add-element">
-        <div class="add-container">
-            <i onclick="displayAddEditWishlistPopup()" class="material-icons">add</i>
-        </div>
-    </div>
-    `;
     return wishlistItemsHtml;
 }
 
@@ -415,11 +459,45 @@ async function displayAddEditWishlistPopup(userId, itemId) {
     }
 }
 
+function displaySubClientWishlist(wishlistItems) {
+    let wishlistItemsHtml = '';
+    for (let item of wishlistItems) {
+        wishlistItemsHtml += /*html*/`
+        <div class="wishlist-item">
+            <div class="item-status" style="display: none;">${item.status}</div>
+            <div class="item-name">${item.itemName}</div>            
+            <div class="expand-item" >
+                <i class="material-icons">keyboard_arrow_down</i>
+            </div>
+        </div>
+        <div class="item-content">
+            <div class="item-description">                
+                <div class="item-desc-elements">
+                    <a href="${item.link}" target="_blank">
+                        <img class="item-picture" src="${item.picture}">    
+                    </a>                    
+                    <div class="item-desc-text">${item.description}</div> 
+                    <div class="item-price">${item.price} €</div>
+                    <div class="edit-remove-item-container">
+                        <div class="date-edit"><i id="edit-icon" class="material-icons">done</i></div>
+                    </div>                   
+                </div>
+            </div>
+        </div>        
+        `;
+    }
+    return wishlistItemsHtml;
+}
+
 let isNavigationOpen = false;
 
 function openLeftNavigation() {
     let navigationElement = document.querySelector('#client-groups-nav');
-    navigationElement.style.width = '33%';
+    if (screen.width < 500) {
+        navigationElement.style.width = '100%';
+    } else {
+        navigationElement.style.width = '33%';
+    }
     document.querySelector("#groups-container").style.display = "flex";
     document.querySelector("#client-picture-container").style.display = "flex";
     document.querySelector("#nav-button-container").style.display = "flex";
@@ -453,7 +531,6 @@ function openWishlistItem() {
     let i;
     for (i = 0; i < coll.length; i++) {
         coll[i].addEventListener("click", function () {
-            console.log(this);
             this.classList.toggle("active");
             let content = this.nextElementSibling;
             let expandIcon = this.querySelector(".expand-item");
@@ -469,6 +546,7 @@ function openWishlistItem() {
                 this.style.borderBottomLeftRadius = "0";
                 this.style.borderBottomRightRadius = "0";
                 this.style.marginBottom = "0";
+                this.nextElementSibling.style.marginBottom = "25px";
             }
         });
     }

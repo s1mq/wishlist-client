@@ -9,7 +9,15 @@ const POPUP_CONF_DEFAULT = {
 const POPUP_CONF_BLANK_300_300 = {
     dimensionClass: 'popup-300-300',
     displayCloseButton: false,
-    coverBackground: 'white',
+    coverBackground: 'var(--main-color)',
+    coverOpacity: '100%',
+    coverCloseOnClick: false
+};
+
+const POPUP_CONF_LOGIN_350_500 = {
+    dimensionClass: 'popup-350-500',
+    displayCloseButton: false,
+    coverBackground: 'var(--main-color)',
     coverOpacity: '100%',
     coverCloseOnClick: false
 };
@@ -37,6 +45,7 @@ const sleep = timeout => new Promise(resolve => setTimeout(resolve, timeout));
 function initPopup() {
     const popupHtml = /*html*/`
         <div id="backgroundCover" style="display: none;"></div>
+        <div id="popup-container">
         <div id="popup" class="popup" style="display: none;">
             <div id="popupContent" style="display: none;">
                 <div id="popupTopBar" style="display: none;">
@@ -50,6 +59,7 @@ function initPopup() {
                 <div id="popupBody">
                 </div>
             </div>
+        </div>
         </div>
     `;
     document.body.innerHTML += popupHtml;
@@ -66,7 +76,7 @@ async function openPopup(conf = POPUP_CONF_DEFAULT, templateId) {
 
 async function displayPopup() {
     const popup = document.querySelector('#popup');
-    popup.style.top = (window.pageYOffset + 50) + "px";
+    popup.style.top = (window.pageYOffset + 200) + "px";
     popup.style.display = 'block';
     await sleep(50);
     popup.classList.add(popupConfActive.dimensionClass);
