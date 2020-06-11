@@ -45,6 +45,7 @@ async function doLoadClient() {
     if (client) {
         displayMainClient(client);
         openWishlistItem();
+        isitemReserved();
         closeLeftNavigation();
     } else {
         displayLoginPopup();
@@ -56,6 +57,7 @@ async function doLoadSubClient(id) {
     if (subClient) {
         displaySubClient(subClient);
         openWishlistItem();
+        isitemReserved();
     }
 }
 
@@ -65,6 +67,18 @@ async function doLoadClientsByGroup(groupId, groupName) {
         displayClientsByGroup(clients, groupName);
     }
     toggleNavigation();
+}
+
+async function doEditItemStatus(userIdentifier, itemId, itemStatus) {
+    if (userIdentifier > 0 && itemId > 0) {
+        item = {
+            id: itemId,
+            status: itemStatus,
+            userId: userIdentifier
+        };
+        await changeStatus(item);
+    }
+
 }
 
 async function doEditGroup() {
@@ -314,7 +328,7 @@ function displayClientsByGroup(clients, name) {
             </div>
             <div class="add-element">
                 <div class="add-container">
-                    <i onclick="displayAddEditGroupPopup()" class="material-icons" style="color: white;">add</i>
+                    <i class="material-icons" style="color: white;">add</i>
                 </div>            
             </div>
         </div>
@@ -465,14 +479,14 @@ function displaySubClientWishlist(wishlistItems) {
     let wishlistItemsHtml = '';
     for (let item of wishlistItems) {
         wishlistItemsHtml += /*html*/`
-        <div class="wishlist-item">
+        <div id="item${item.id}" class="wishlist-item">
             <div class="item-status" style="display: none;">${item.status}</div>
             <div class="item-name">${item.itemName}</div>            
             <div class="expand-item" >
                 <i class="material-icons">keyboard_arrow_down</i>
             </div>
         </div>
-        <div class="item-content">
+        <div id="content${item.id}" class="item-content">
             <div class="item-description">                
                 <div class="item-desc-elements">
                     <a href="${item.link}" target="_blank">
@@ -481,7 +495,9 @@ function displaySubClientWishlist(wishlistItems) {
                     <div class="item-desc-text">${item.description}</div> 
                     <div class="item-price">${item.price} €</div>
                     <div class="edit-remove-item-container">
-                        <div class="date-edit"><i id="edit-icon" class="material-icons">done</i></div>
+                        <div onclick="reserveItem(${item.userId}, ${item.id}, ${item.status})" class="date-edit">
+                            <i id="edit-icon" class="material-icons">done</i>
+                        </div>
                     </div>                   
                 </div>
             </div>
@@ -607,4 +623,26 @@ function displayFormErrors(errors) {
 
     errorBox.innerHTML = errorsHtml;
 
+}
+
+function isitemReserved(){
+    let coll = document.querySelectorAll(".wishlist-item");
+    for(let el of coll) {
+        if (el.firstElementChild.innerHTML === 'true') {
+            el.style.opacity = '35%';
+            el.nextElementSibling.style.opacity = '35%';
+        } else {
+            el.style.opacity = '100%';
+            el.nextElementSibling.style.opacity = '100%';
+        }
+    }
+}
+
+function reserveItem(userId, id, status) {
+    if (status == true) {
+        doEditItemStatus(userId, id, false);
+    } else {
+        doEditItemStatus(userId, id, true)
+    }   
+    
 }

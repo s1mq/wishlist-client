@@ -116,6 +116,24 @@ async function addWishlistItem(item) {
     }
 }
 
+async function changeStatus(item) {
+    try {
+        const response = await fetch(`${API_URL}/wishlistItems/add/${item.userId}/${item.itemId}`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': composeBearerToken()
+            },
+            body: JSON.stringify(item)
+
+        });
+        handleResponse(response);
+    } catch (e) {
+        console.log('ERROR IN ADDING ITEM', e);
+    }
+}
+
 async function fetchGroupByUserAndGroupId(userId, groupId) {
     try {
         const response = await fetch(`${API_URL}/groups/${userId}/${groupId}`, {
