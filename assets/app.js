@@ -48,9 +48,19 @@ async function doLoadClient() {
     if (client) {
         displayClient(client);
         openWishlistItem();
+        closeLeftNavigation();
     } else {
         displayLoginPopup();
     }
+}
+
+async function doLoadClientsByGroup(groupId, groupName) {
+    clients = await fetchClientsByGroup(groupId);
+    console.log(clients);
+    if (clients) {
+        displayClientsByGroup(clients, groupName);
+    }
+    toggleNavigation();
 }
 
 async function doEditGroup() {
@@ -204,7 +214,7 @@ function displayClient(client) {
             <div id="client-groups-nav">
             <i id="nav-button-container" onclick="toggleNavigation()" class="material-icons">view_headline</i>
                 <div id="client-picture-container">
-                    <div id="client-photo"><img src="${client.photo}"></div>
+                    <div id="client-photo"><img onclick="doLoadClient()" class="client-photo-img" src="${client.photo}"></div>
                 </div>
                 <div id="groups-container">
                     <h2>Your groups:</h2> <br><br>
@@ -223,13 +233,63 @@ function displayClient(client) {
     mainElement.innerHTML = clientHtml;
 }
 
+function displayClientsByGroup(clients, name) {
+    const mainElement = document.querySelector('main');
+    let clientsByGroupHtml = '';
+
+    clientsByGroupHtml += /*html*/ `
+        <div id="client-box">
+            <div id="client-header">
+                <div id="client-name">${name}</div>            
+            </div> <br>        
+            <div id="client-groups-nav">
+            <i id="nav-button-container" onclick="toggleNavigation()" class="material-icons">view_headline</i>
+                <div id="client-picture-container">
+                    <div id="client-photo"><img onclick="doLoadClient()" class="client-photo-img" src="${client.photo}"></div>
+                </div>
+                <div id="groups-container">
+                    <h2>Your groups:</h2> <br><br>
+                    ${displayGroups(client.groups)}
+                        
+                </div>
+            </div>
+            <div id="clients-by-group">
+                ${displayClients(clients)}
+            </div>
+            <div class="add-element">
+                <div class="add-container">
+                    <i onclick="displayAddEditGroupPopup()" class="material-icons" style="color: white;">add</i>
+                </div>            
+            </div>
+        </div>
+    `;
+    mainElement.innerHTML = clientsByGroupHtml;
+}
+
+function displayClients(clients) {
+    let clientsHtml = '';
+    for (let client of clients) {
+        clientsHtml += /*html*/`        
+        <div>
+            <div class="client-list-el">
+                <img class="" src="${client.photo}">
+            </div>
+            <div class="client-list-el" style="color: var(--main-color);">
+                <h2>${client.name}</h2>            
+            </div>                    
+        </div>
+        `;
+    }
+    return clientsHtml;
+}
+
 function displayGroups(groups) {
     let groupsHtml = '';
     for (let group of groups) {
         groupsHtml += /*html*/`        
         <div class="client-group">
             <div class="group-el">
-                <img src="${group.picture}">
+                <img onclick="doLoadClientsByGroup(${group.id}, '${group.name}')" src="${group.picture}">
             </div>
             <div class="group-el">
                 <h2>${group.name}</h2>            
@@ -308,7 +368,7 @@ function displayWishlist(wishlistItems) {
         <div class="wishlist-item">
             <div class="item-status" style="display: none;">${item.status}</div>
             <div class="item-name">${item.itemName}</div>            
-            <div class="expand-item" id="expand-item-${item.id}">
+            <div class="expand-item" >
                 <i class="material-icons">keyboard_arrow_down</i>
             </div>
         </div>
@@ -390,22 +450,25 @@ function toggleNavigation() {
 
 function openWishlistItem() {
     let coll = document.querySelectorAll(".wishlist-item");
-    console.log('coll length: ', coll.length);
     let i;
-    
-
     for (i = 0; i < coll.length; i++) {
         coll[i].addEventListener("click", function () {
+            console.log(this);
             this.classList.toggle("active");
             let content = this.nextElementSibling;
             let expandIcon = this.querySelector(".expand-item");
             if (content.style.display === "flex") {
                 content.style.display = "none";
                 expandIcon.innerHTML = '<i class="material-icons">keyboard_arrow_down</i>';
+                this.style.borderBottomLeftRadius = "10px";
+                this.style.borderBottomRightRadius = "10px";
+                this.style.marginBottom = "8px";
             } else {
                 content.style.display = "flex";
                 expandIcon.innerHTML = '<i class="material-icons">keyboard_arrow_up</i>';
-
+                this.style.borderBottomLeftRadius = "0";
+                this.style.borderBottomRightRadius = "0";
+                this.style.marginBottom = "0";
             }
         });
     }

@@ -6,8 +6,8 @@
 }
 
 :root {
-    --main-color: #32494b;
-    --secondary-color: #5c7577;
+    --main-color: #264653;
+    --secondary-color: #00afb9;
     --accent-color: #0a2123;
 }
 
@@ -68,7 +68,40 @@ html, body {
     border-radius: 50%;
     height: 75px;
     width: 75px;
-    object-fit: cover;    
+    object-fit: cover;
+    transition: 0.3s;    
+}
+
+.group-el > img:hover{
+    border: 3px solid var(--secondary-color);
+    cursor: pointer;   
+}
+
+#clients-by-group {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.client-list-el > img{
+    border-radius: 50%;
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+    transition: 0.3s;    
+}
+
+.client-list-el > img:hover{
+    border: 3px solid var(--secondary-color);
+    cursor: pointer;     
+}
+
+.client-list-el {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #client-header {
@@ -114,7 +147,13 @@ html, body {
     border-radius: 50%;
     height: 150px;
     width: 150px;
-    object-fit: cover;    
+    object-fit: cover;
+    transition: 0.3s;    
+}
+
+#client-photo > img:hover{
+    border: 5px solid var(--secondary-color);
+    cursor: pointer;   
 }
 
 #client-photo {
@@ -136,7 +175,7 @@ html, body {
     margin-left: 8px;
     margin-right: 8px;
     margin-top: 8px;
-    display: block;
+    display: flex;
     justify-content: flex-end;
 }
 
@@ -154,9 +193,6 @@ html, body {
     color: white; 
 }
 
-#client-photo {
-    flex: 1;
-}
 
 #client-name {
     font-size: 3em;
@@ -172,7 +208,7 @@ html, body {
 }
 
 .group-el {
-    flex: 1;
+    flex: 5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -243,6 +279,16 @@ html, body {
     align-items: center;
 }
 
+.wishlist-item:active{
+    padding-left: 8px;    
+    height: 75px;
+    font-size: 1.5em;
+    background-color: var(--main-color);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+}
+
 .item-name {
     flex: 9;
 }
@@ -263,14 +309,12 @@ html, body {
 .item-content {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    padding-left: 8px;
     margin-bottom: 8px;
     display: none;
     overflow: hidden;
     flex-direction: column;    
     background-color: var(--main-color);
-    
-    transition: 0.5s;
+    transition: 0.3s;
 }
 
 .item-description {
@@ -280,6 +324,7 @@ html, body {
 
 .item-desc-elements {
     display: flex;
+    flex-flow: row wrap;
 }
 
 .item-picture {

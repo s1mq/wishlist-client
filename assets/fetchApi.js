@@ -27,6 +27,22 @@ async function fetchClient(client) {
     }
 }
 
+async function fetchClientsByGroup(groupId) {
+    try {
+        const response = await fetch(`${API_URL}/clients/group/${groupId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': composeBearerToken()
+            }
+        });
+        return await processProtectedResponse(response);
+    } catch (e) {
+        console.log('ERROR OCCURED', e);
+    }
+}
+
+
+
 async function addGroup(group) {
     try {
         const response = await fetch(`${API_URL}/groups/add`,
